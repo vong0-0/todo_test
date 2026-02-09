@@ -1,0 +1,25 @@
+version: "3.8" # เวอร์ชั่นของ Docker Compose
+
+services:
+  db:
+    image: postgres:15-alpine # ใช้รูปจำลองของ PostgreSQL เวอร์ชั่น 15 (แบบเบาหวิว)
+    container_name: my-express-db # ตั้งชื่อกล่องใบนี้
+    restart: always # ถ้าเครื่องรีสตาร์ท หรือ DB หลุด ให้มันรันตัวเองขึ้นมาใหม่
+    environment:
+      POSTGRES_USER: devuser # ชื่อ Username ที่เราจะใช้ Login
+      POSTGRES_PASSWORD: devpassword # รหัสผ่าน (แก้ไขได้ตามใจชอบ)
+      POSTGRES_DB: todo_test # ชื่อฐานข้อมูลที่จะสร้างขึ้นมา
+    ports:
+      - "5432:5432" # เชื่อมพอร์ตเครื่องเรา (ซ้าย) เข้ากับกล่อง Docker (ขวา)
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # เก็บข้อมูลไว้ในเครื่องเรา (ปิดคอมข้อมูลก็ไม่หาย)
+
+  cache:
+    image: redis:7-alpine
+    container_name: my-express-redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+volumes:
+  postgres_data: # ประกาศตัวเก็บข้อมูลสำรอง
