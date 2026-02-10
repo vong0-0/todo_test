@@ -1,9 +1,19 @@
 import express, { type Request, type Response } from "express";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 import routes from "./routes/index.js";
 import { globalErrorHandler } from "./middleware/error.middleware.js";
+import { env } from "./config/env.js";
 
 const app = express();
+
+app.use(
+  cors({
+    origin: env.FRONTEND_URL,
+    credentials: true,
+  }),
+);
+
 app.use(express.json());
 app.use(cookieParser());
 
